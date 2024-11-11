@@ -28,7 +28,7 @@ df = pd.read_csv(csv_path)
 
 if __name__ == "__main__":
     if serial_on:
-        ser = serial.Serial(com_port, baud_rate, timeout=1)
+        ser = serial.Serial(com_port, baud_rate, timeout=0.01)
 
     cap = cv2.VideoCapture(0)
 
@@ -54,7 +54,9 @@ if __name__ == "__main__":
         weather_next = df.loc[x+1, 'weather']
 
         if serial_on:
-            ser.write(serial_string.encode())
+            ser.write(serial_string.encode("A180B135C90D45"))
+            time.sleep(1)
+            ser.write(serial_string.encode("A0B0C0D0"))
 
         time.sleep(5)
         ret, frame = cap.read()
