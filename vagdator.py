@@ -6,7 +6,7 @@ import time
 import serial
 import cv2
 
-serial_on = False
+serial_on = True
 
 com_port = 'COM3'
 baud_rate = 9600
@@ -46,17 +46,25 @@ if __name__ == "__main__":
         print(df.loc[x, 'date'])
         print(df.loc[x, 'temp_max'])
 
-
+        precipitation = df.loc[x, 'precipitation']
         temp_max = df.loc[x, 'temp_max']
+        temp_min = df.loc[x, 'temp_min']
+        wind = df.loc[x, 'wind']
 
-        serial_string = str(temp_max)
+        precipitation_processed = max(0, min(round(precipitation * 6), 180))
+        temp_max_processed = max(0, min(round(temp_max * 5.29), 180))
+        temp_min_processed = max(0, min(round((temp_min + 5) * 7.72), 180))
+        wind_processed = max(0, min(round(wind * 20), 180))
+
+        go_string = "A" + str(precipitation_processed) + "B" + str(temp_max_processed) + "C" + str(temp_min_processed) + "D" + str(wind_processed)
+        off_string = "A0B0C0D0"
 
         weather_next = df.loc[x+1, 'weather']
 
         if serial_on:
-            ser.write(serial_string.encode("A180B135C90D45"))
+            ser.write(go_string.encode())
             time.sleep(1)
-            ser.write(serial_string.encode("A0B0C0D0"))
+            ser.write(off_string.encode())
 
         time.sleep(5)
         ret, frame = cap.read()
