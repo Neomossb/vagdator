@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
         if serial_on:
             ser.write(go_string.encode())
-            time.sleep(1)
+            time.sleep(0.4)
             ser.write(off_string.encode())
 
         time.sleep(5)
