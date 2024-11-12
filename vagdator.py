@@ -8,15 +8,19 @@ import cv2
 
 serial_on = True
 
+servo_a_off = 20
 servo_a_min = 20
 servo_a_max = 160
 
+servo_b_off = 20
 servo_b_min = 20
 servo_b_max = 160
 
+servo_c_off = 20
 servo_c_min = 20
 servo_c_max = 160
 
+servo_d_off = 20
 servo_d_min = 20
 servo_d_max = 160
 
@@ -67,7 +71,7 @@ if __name__ == "__main__":
         wind_processed = max(0, min(round(wind * 20), 180))
 
         go_string = "A" + str(round(((servo_a_max-servo_a_min)/180) * precipitation_processed + servo_a_min)) + "B" + str(round(((servo_b_max-servo_b_min)/180) * temp_max_processed + servo_b_min)) + "C" + str(round(((servo_c_max-servo_c_min)/180) * temp_min_processed + servo_c_min)) + "D" + str(round(((servo_d_max-servo_d_min)/180) * wind_processed + servo_d_min))
-        off_string = "A0B0C0D0"
+        off_string = "A" + str(servo_a_off) + "B" + str(servo_b_off) + "C" + str(servo_c_off) + "D" + str(servo_d_off)
 
         weather_next = df.loc[x+1, 'weather']
 
@@ -84,6 +88,7 @@ if __name__ == "__main__":
         print(wind_processed)
 
         print(go_string)
+        print(off_string)
 
         print(weather_next)
 
