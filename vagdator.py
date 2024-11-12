@@ -8,21 +8,21 @@ import cv2
 
 serial_on = True
 
-servo_a_off = 20
+servo_a_off = 10
 servo_a_min = 20
-servo_a_max = 160
+servo_a_max = 60
 
 servo_b_off = 20
-servo_b_min = 20
-servo_b_max = 160
+servo_b_min = 40
+servo_b_max = 80
 
-servo_c_off = 20
-servo_c_min = 20
-servo_c_max = 160
+servo_c_off = 30
+servo_c_min = 60
+servo_c_max = 100
 
-servo_d_off = 20
-servo_d_min = 20
-servo_d_max = 160
+servo_d_off = 40
+servo_d_min = 80
+servo_d_max = 120
 
 com_port = 'COM3'
 baud_rate = 9600
