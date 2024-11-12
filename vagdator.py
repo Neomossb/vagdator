@@ -71,6 +71,8 @@ if __name__ == "__main__":
 
         weather_next = df.loc[x+1, 'weather']
 
+        print(df.loc[x, 'date'])
+
         print(precipitation)
         print(temp_max)
         print(temp_min)
@@ -80,6 +82,8 @@ if __name__ == "__main__":
         print(temp_max_processed)
         print(temp_min_processed)
         print(wind_processed)
+
+        print(go_string)
 
         print(weather_next)
 
