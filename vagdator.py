@@ -69,13 +69,18 @@ if __name__ == "__main__":
         time.sleep(5)
         ret, frame = cap.read()
 
-        new_width, new_height = 128, 96
+        new_width, new_height = 256, 192
+
+        start_x, start_y = 64, 48  # Top-left corner of the crop
+        end_x, end_y = 192, 144  # Bottom-right corner of the crop
 
         img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert to black and white
         img_blur = cv2.GaussianBlur(img_gray, (3, 3), 0) # gaussian blur for better edge detection
         sobel_xy = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=5) # edge detection
 
         resized_image = cv2.resize(sobel_xy, (new_width, new_height), interpolation=cv2.INTER_AREA)
+
+        cropped_image = resized_image[start_y:end_y, start_x:end_x]
 
         if ret:
             # Set up the save path
@@ -97,7 +102,7 @@ if __name__ == "__main__":
             print(save_path)
 
             # Save the image
-            cv2.imwrite(save_path, resized_image)
+            cv2.imwrite(save_path, cropped_image)
             print(f"Image saved to {save_path}")
         else:
             print("Error: Could not capture an image.")
