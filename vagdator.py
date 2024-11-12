@@ -8,6 +8,18 @@ import cv2
 
 serial_on = True
 
+servo_a_min = 20
+servo_a_max = 160
+
+servo_b_min = 20
+servo_b_max = 160
+
+servo_c_min = 20
+servo_c_max = 160
+
+servo_d_min = 20
+servo_d_max = 160
+
 com_port = 'COM3'
 baud_rate = 9600
 
@@ -43,8 +55,6 @@ if __name__ == "__main__":
     print("Number of rows:", num_rows)
 
     for x in range(num_rows):
-        print(df.loc[x, 'date'])
-        print(df.loc[x, 'temp_max'])
 
         precipitation = df.loc[x, 'precipitation']
         temp_max = df.loc[x, 'temp_max']
@@ -56,10 +66,22 @@ if __name__ == "__main__":
         temp_min_processed = max(0, min(round((temp_min + 5) * 7.72), 180))
         wind_processed = max(0, min(round(wind * 20), 180))
 
-        go_string = "A" + str(precipitation_processed) + "B" + str(temp_max_processed) + "C" + str(temp_min_processed) + "D" + str(wind_processed)
+        go_string = "A" + str(round(((servo_a_max-servo_a_min)/180) * precipitation_processed + servo_a_min)) + "B" + str(round(((servo_b_max-servo_b_min)/180) * temp_max_processed + servo_b_min)) + "C" + str(round(((servo_c_max-servo_c_min)/180) * temp_min_processed + servo_c_min)) + "D" + str(round(((servo_d_max-servo_d_min)/180) * wind_processed + servo_d_min))
         off_string = "A0B0C0D0"
 
         weather_next = df.loc[x+1, 'weather']
+
+        print(precipitation)
+        print(temp_max)
+        print(temp_min)
+        print(wind)
+
+        print(precipitation_processed)
+        print(temp_max_processed)
+        print(temp_min_processed)
+        print(wind_processed)
+
+        print(weather_next)
 
         if serial_on:
             ser.write(go_string.encode())
