@@ -8,9 +8,9 @@ import cv2
 
 serial_on = True
 
-servo_a_off = 10
-servo_a_min = 20
-servo_a_max = 60
+servo_a_off = 43
+servo_a_min = 44
+servo_a_max = 85
 
 servo_b_off = 20
 servo_b_min = 40
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     if serial_on:
         ser = serial.Serial(com_port, baud_rate, timeout=0.01)
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
 
     if not cap.isOpened():
         print("Error: Could not open webcam.")
@@ -94,16 +94,16 @@ if __name__ == "__main__":
 
         if serial_on:
             ser.write(go_string.encode())
-            time.sleep(0.4)
+            time.sleep(0.2)
             ser.write(off_string.encode())
 
-        time.sleep(5)
+        time.sleep(0.6)
         ret, frame = cap.read()
 
-        new_width, new_height = 256, 192
+        new_width, new_height = 400, 300
 
-        start_x, start_y = 64, 48  # Top-left corner of the crop
-        end_x, end_y = 192, 144  # Bottom-right corner of the crop
+        start_x, start_y = 0, 0  # Top-left corner of the crop
+        end_x, end_y = 1279, 719  # Bottom-right corner of the crop
 
         img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert to black and white
         img_blur = cv2.GaussianBlur(img_gray, (3, 3), 0) # gaussian blur for better edge detection
