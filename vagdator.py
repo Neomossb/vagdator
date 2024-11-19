@@ -8,21 +8,21 @@ import cv2
 
 serial_on = True
 
-servo_a_off = 43
-servo_a_min = 44
-servo_a_max = 85
+servo_a_off = 38
+servo_a_min = 41
+servo_a_max = 64
 
-servo_b_off = 20
-servo_b_min = 40
-servo_b_max = 80
+servo_b_off = 28
+servo_b_min = 31
+servo_b_max = 58
 
-servo_c_off = 30
-servo_c_min = 60
-servo_c_max = 100
+servo_c_off = 32
+servo_c_min = 35
+servo_c_max = 57
 
-servo_d_off = 40
-servo_d_min = 80
-servo_d_max = 120
+servo_d_off = 35
+servo_d_min = 38
+servo_d_max = 65
 
 com_port = 'COM3'
 baud_rate = 9600
@@ -97,13 +97,13 @@ if __name__ == "__main__":
             time.sleep(0.2)
             ser.write(off_string.encode())
 
-        time.sleep(0.6)
+        time.sleep(0.8)
         ret, frame = cap.read()
 
         new_width, new_height = 400, 300
 
-        start_x, start_y = 0, 0  # Top-left corner of the crop
-        end_x, end_y = 1279, 719  # Bottom-right corner of the crop
+        start_x, start_y = 25, 15  # Top-left corner of the crop
+        end_x, end_y = 260, 295  # Bottom-right corner of the crop
 
         img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert to black and white
         img_blur = cv2.GaussianBlur(img_gray, (3, 3), 0) # gaussian blur for better edge detection

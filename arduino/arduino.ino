@@ -17,6 +17,11 @@ void setup() {
   servoB.attach(9);
   servoC.attach(10);
   servoD.attach(11);
+
+  servoA.write(0);
+  servoB.write(0);
+  servoC.write(0);
+  servoD.write(0);
 }
 
 void loop() {
