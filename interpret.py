@@ -6,6 +6,8 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 import torch.nn.functional as F
 import os
+from sklearn.utils.class_weight import compute_class_weight
+import numpy as np
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(script_dir, "data/data1")
@@ -44,10 +46,15 @@ class WeatherClassifier(nn.Module):
         x = self.fc2(x)
         return x
 
+# Compute class weights
+class_weights = compute_class_weight('balanced', classes=np.arange(5), y=dataset.targets)
+class_weights = torch.tensor(class_weights, dtype=torch.float32)
+
+
 
 model = WeatherClassifier()
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.0005)
+criterion = nn.CrossEntropyLoss(weight=class_weights)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 scheduler = StepLR(optimizer, step_size=5, gamma=0.5)
 
 # Training loop
@@ -78,6 +85,6 @@ for epoch in range(50):  # Train for 10 epochs
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
-    print(f"Epoch {epoch + 1}/{10}, Train Loss: {train_loss / len(train_loader):.4f}, "
+    print(f"Epoch {epoch + 1}/{50}, Train Loss: {train_loss / len(train_loader):.4f}, "
           f"Val Loss: {val_loss / len(val_loader):.4f}, Val Accuracy: {100 * correct / total:.2f}%")
 
