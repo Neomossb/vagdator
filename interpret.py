@@ -15,7 +15,8 @@ data_path = os.path.join(script_dir, "dataall")
 transform = transforms.Compose([
     transforms.Grayscale(num_output_channels=1),  # Ensure grayscale
     transforms.Resize((357, 306)),               # Ensure size is consistent
-    transforms.ToTensor()                        # Convert to tensor
+    transforms.ToTensor(),                        # Convert to tensor
+    transforms.Normalize((0.5,), (0.5,))
 ])
 
 dataset = datasets.ImageFolder(root=data_path, transform=transform)
@@ -34,16 +35,33 @@ class WeatherClassifier(nn.Module):
         self.conv1 = nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1)
         self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1)
         self.conv3 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
-        self.fc1 = nn.Linear(64 * (235 // 8) * (280 // 8), 128)  # Adjust for downsampling
+
+        # Dropout layers
+        self.dropout_conv = nn.Dropout2d(0.25)  # Dropout for convolutional layers
+        self.dropout_fc = nn.Dropout(0.5)  # Dropout for fully connected layers
+
+        # Fully connected layers
+        self.fc1 = nn.Linear(64 * (357 // 8) * (306 // 8), 128)  # Adjust for downsampling
         self.fc2 = nn.Linear(128, 5)  # 5 output classes
 
     def forward(self, x):
+        # Convolutional layers with dropout
         x = F.relu(F.max_pool2d(self.conv1(x), 2))
+        x = self.dropout_conv(x)  # Apply dropout after first conv layer
+
         x = F.relu(F.max_pool2d(self.conv2(x), 2))
+        x = self.dropout_conv(x)  # Apply dropout after second conv layer
+
         x = F.relu(F.max_pool2d(self.conv3(x), 2))
-        x = x.view(x.size(0), -1)  # Flatten
+        x = self.dropout_conv(x)  # Apply dropout after third conv layer
+
+        # Flatten the output for the fully connected layers
+        x = x.view(x.size(0), -1)
+
+        # Fully connected layers with dropout
         x = F.relu(self.fc1(x))
-        x = self.fc2(x)
+        x = self.dropout_fc(x)  # Apply dropout after first fully connected layer
+        x = self.fc2(x)  # Output layer (no activation here, handled by loss function)
         return x
 
 # Compute class weights
