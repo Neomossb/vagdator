@@ -10,11 +10,11 @@ from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(script_dir, "data/data1")
+data_path = os.path.join(script_dir, "dataall")
 
 transform = transforms.Compose([
     transforms.Grayscale(num_output_channels=1),  # Ensure grayscale
-    transforms.Resize((235, 280)),               # Ensure size is consistent
+    transforms.Resize((357, 306)),               # Ensure size is consistent
     transforms.ToTensor()                        # Convert to tensor
 ])
 

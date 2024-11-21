@@ -9,19 +9,19 @@ import cv2
 serial_on = True
 
 servo_a_off = 38
-servo_a_min = 41
-servo_a_max = 64
+servo_a_min = 39
+servo_a_max = 60
 
-servo_b_off = 28
-servo_b_min = 31
+servo_b_off = 26
+servo_b_min = 27
 servo_b_max = 58
 
 servo_c_off = 32
-servo_c_min = 35
+servo_c_min = 33
 servo_c_max = 57
 
 servo_d_off = 35
-servo_d_min = 38
+servo_d_min = 36
 servo_d_max = 65
 
 com_port = 'COM3'
@@ -72,6 +72,7 @@ if __name__ == "__main__":
 
         go_string = "A" + str(round(((servo_a_max-servo_a_min)/180) * precipitation_processed + servo_a_min)) + "B" + str(round(((servo_b_max-servo_b_min)/180) * temp_max_processed + servo_b_min)) + "C" + str(round(((servo_c_max-servo_c_min)/180) * temp_min_processed + servo_c_min)) + "D" + str(round(((servo_d_max-servo_d_min)/180) * wind_processed + servo_d_min))
         off_string = "A" + str(servo_a_off) + "B" + str(servo_b_off) + "C" + str(servo_c_off) + "D" + str(servo_d_off)
+        # off_string = "A" + str(servo_a_max) + "B" + str(servo_b_max) + "C" + str(servo_c_max) + "D" + str(servo_d_max)
 
         weather_next = df.loc[x+1, 'weather']
 
@@ -100,14 +101,15 @@ if __name__ == "__main__":
         time.sleep(0.8)
         ret, frame = cap.read()
 
-        new_width, new_height = 400, 300
+        # new_width, new_height = 400, 300
+        new_width, new_height = 640, 360
 
-        start_x, start_y = 25, 15  # Top-left corner of the crop
-        end_x, end_y = 260, 295  # Bottom-right corner of the crop
+        start_x, start_y = 133, 54  # Top-left corner of the crop
+        end_x, end_y = 490, 360  # Bottom-right corner of the crop
 
         img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert to black and white
-        img_blur = cv2.GaussianBlur(img_gray, (3, 3), 0) # gaussian blur for better edge detection
-        sobel_xy = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=5) # edge detection
+        img_blur = cv2.GaussianBlur(img_gray, (5, 5), 0) # gaussian blur for better edge detection
+        sobel_xy = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=7) # edge detection
 
         resized_image = cv2.resize(sobel_xy, (new_width, new_height), interpolation=cv2.INTER_AREA)
 
@@ -129,7 +131,7 @@ if __name__ == "__main__":
 
 
             os.makedirs(save_dir, exist_ok=True)
-            save_path = os.path.join(save_dir, str(x) + ".jpg")
+            save_path = os.path.join(save_dir, str(x + 6000) + ".jpg")
             print(save_path)
 
             # Save the image
