@@ -98,17 +98,17 @@ if __name__ == "__main__":
             time.sleep(0.2)
             ser.write(off_string.encode())
 
-        time.sleep(0.8)
+        time.sleep(0.5)
         ret, frame = cap.read()
 
         # new_width, new_height = 400, 300
         new_width, new_height = 640, 360
 
-        start_x, start_y = 133, 54  # Top-left corner of the crop
-        end_x, end_y = 490, 360  # Bottom-right corner of the crop
+        start_x, start_y = 120, 37  # Top-left corner of the crop
+        end_x, end_y = 495, 360  # Bottom-right corner of the crop
 
         img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert to black and white
-        img_blur = cv2.GaussianBlur(img_gray, (5, 5), 0) # gaussian blur for better edge detection
+        img_blur = cv2.GaussianBlur(img_gray, (21, 21), 0) # gaussian blur for better edge detection
         sobel_xy = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=7) # edge detection
 
         resized_image = cv2.resize(sobel_xy, (new_width, new_height), interpolation=cv2.INTER_AREA)
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
 
             os.makedirs(save_dir, exist_ok=True)
-            save_path = os.path.join(save_dir, str(x + 6000) + ".jpg")
+            save_path = os.path.join(save_dir, str(x + 8000) + ".jpg")
             print(save_path)
 
             # Save the image

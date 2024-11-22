@@ -10,7 +10,7 @@ from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(script_dir, "dataall")
+data_path = os.path.join(script_dir, "data/0_5")
 
 transform = transforms.Compose([
     transforms.Grayscale(num_output_channels=1),  # Ensure grayscale
@@ -47,20 +47,20 @@ class WeatherClassifier(nn.Module):
     def forward(self, x):
         # Convolutional layers with dropout
         x = F.relu(F.max_pool2d(self.conv1(x), 2))
-        x = self.dropout_conv(x)  # Apply dropout after first conv layer
+        # x = self.dropout_conv(x)  # Apply dropout after first conv layer
 
         x = F.relu(F.max_pool2d(self.conv2(x), 2))
-        x = self.dropout_conv(x)  # Apply dropout after second conv layer
+        # x = self.dropout_conv(x)  # Apply dropout after second conv layer
 
         x = F.relu(F.max_pool2d(self.conv3(x), 2))
-        x = self.dropout_conv(x)  # Apply dropout after third conv layer
+        # x = self.dropout_conv(x)  # Apply dropout after third conv layer
 
         # Flatten the output for the fully connected layers
         x = x.view(x.size(0), -1)
 
         # Fully connected layers with dropout
         x = F.relu(self.fc1(x))
-        x = self.dropout_fc(x)  # Apply dropout after first fully connected layer
+        # x = self.dropout_fc(x)  # Apply dropout after first fully connected layer
         x = self.fc2(x)  # Output layer (no activation here, handled by loss function)
         return x
 
