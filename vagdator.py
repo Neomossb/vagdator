@@ -98,13 +98,13 @@ if __name__ == "__main__":
             time.sleep(0.2)
             ser.write(off_string.encode())
 
-        time.sleep(0.5)
+        time.sleep(1.2)
         ret, frame = cap.read()
 
         # new_width, new_height = 400, 300
         new_width, new_height = 640, 360
 
-        start_x, start_y = 120, 37  # Top-left corner of the crop
+        start_x, start_y = 125, 30  # Top-left corner of the crop
         end_x, end_y = 495, 360  # Bottom-right corner of the crop
 
         img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert to black and white
