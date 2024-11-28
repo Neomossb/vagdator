@@ -13,7 +13,7 @@ img_width = 370
 img_height = 330
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(script_dir, "dataall")
+data_path = os.path.join(script_dir, "data/data3")
 
 transform = transforms.Compose([
     transforms.Grayscale(num_output_channels=1),  # Ensure grayscale
@@ -76,9 +76,9 @@ class WeatherClassifier(nn.Module):
         input_size = img_width * img_height
 
         # Define the three linear layers
-        self.fc1 = nn.Linear(input_size, 512)  # First layer
-        self.fc2 = nn.Linear(512, 256)  # Second layer
-        self.fc3 = nn.Linear(256, 5)
+        self.fc1 = nn.Linear(input_size, 128)  # First layer
+        self.fc2 = nn.Linear(128, 64)  # Second layer
+        self.fc3 = nn.Linear(64, 5)
 
     def forward(self, x):
         # Flatten the input image to a vector
@@ -100,7 +100,7 @@ class WeatherClassifier(nn.Module):
 model = WeatherClassifier()
 # criterion = nn.CrossEntropyLoss(weight=class_weights)
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
 scheduler = StepLR(optimizer, step_size=1, gamma=0.85)
 
 # Training loop
