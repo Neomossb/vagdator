@@ -76,9 +76,9 @@ class WeatherClassifier(nn.Module):
         input_size = img_width * img_height
 
         # Define the three linear layers
-        self.fc1 = nn.Linear(input_size, 256)  # First layer
-        self.fc2 = nn.Linear(256, 128)  # Second layer
-        self.fc3 = nn.Linear(128, 64)  # Third layer
+        self.fc1 = nn.Linear(input_size, 512)  # First layer
+        self.fc2 = nn.Linear(512, 256)  # Second layer
+        self.fc3 = nn.Linear(256, 5)
 
     def forward(self, x):
         # Flatten the input image to a vector
@@ -100,8 +100,8 @@ class WeatherClassifier(nn.Module):
 model = WeatherClassifier()
 # criterion = nn.CrossEntropyLoss(weight=class_weights)
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
-scheduler = StepLR(optimizer, step_size=5, gamma=0.5)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+scheduler = StepLR(optimizer, step_size=1, gamma=0.85)
 
 # Training loop
 for epoch in range(50):  # Train for 50 epochs
